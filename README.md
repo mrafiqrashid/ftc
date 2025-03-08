@@ -65,7 +65,8 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-Example of interface
-<img src="ss/member.png" alt="Description" width="300">
-<img src="ss/purchase.png" alt="Description" width="300">
-<img src="ss/family tree chart.png" alt="Description" width="300">
+## Example of interface
+
+<img src="ss/member.png" alt="Description" width="400">
+<img src="ss/purchase.png" alt="Description" width="400">
+<img src="ss/family tree chart.png" alt="Description" width="400">
