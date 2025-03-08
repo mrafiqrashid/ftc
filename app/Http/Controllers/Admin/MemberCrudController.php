@@ -7,6 +7,8 @@ use App\Models\Member;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class MemberCrudController
@@ -122,7 +124,13 @@ class MemberCrudController extends CrudController
 
     protected function familyTreeChart(Request $request)
     {
-        $familyTree = $this->buildTree(Member::all());
+        $member = $this->getData();
+        Log::info($member->toArray());
+        // Log::info(Member::all()->toArray());
+
+        $familyTree = $this->buildTree($member);
+        // Log::info($familyTree);
+
         return view('admin.member.familyTreeChart', compact('familyTree'));
     }
     private function buildTree($members, $parentID = null)
@@ -139,6 +147,46 @@ class MemberCrudController extends CrudController
             }
         }
 
+
+
+
         return $tree;
+    }
+
+    private function getData()
+    {
+        $personalAmount = DB::table('purchases')
+            ->select('memberid', DB::raw('SUM(amount) as personal_amount'))
+            ->groupBy('memberid');
+
+        $referralAmount = DB::table('members as m')
+            ->join('purchases as p', 'm.memberid', '=', 'p.memberid')
+            ->select('m.parentID as memberid', DB::raw('SUM(p.amount) as referral_amount'))
+            ->groupBy('m.parentID');
+
+        $results = DB::table('members as m')
+            ->leftJoinSub($personalAmount, 'pa', function ($join) {
+                $join->on('m.memberid', '=', 'pa.memberid');
+            })
+            ->leftJoinSub($referralAmount, 'ra', function ($join) {
+                $join->on('m.memberid', '=', 'ra.memberid');
+            })
+            ->select(
+                'm.memberid as memberID',
+                'm.name',
+                'm.dateJoin',
+                'm.telM',
+                'm.parentID',
+                DB::raw('COALESCE(pa.personal_amount, 0) AS Total_Personal_Purchase'),
+                DB::raw('COALESCE(ra.referral_amount, 0) AS Total_Referral_Member_Purchase'),
+                DB::raw('(COALESCE(pa.personal_amount, 0) + COALESCE(ra.referral_amount, 0)) AS Total_Group_Purchase')
+            )
+            ->orderBy('m.memberid')
+            ->orderBy('m.name')
+            ->orderBy('m.dateJoin')
+            ->orderBy('m.telM')
+            ->get();
+
+        return $results;
     }
 }

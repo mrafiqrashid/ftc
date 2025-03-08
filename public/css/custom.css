@@ -125,3 +125,13 @@
 .tree li a:hover + ul ul::before {
     border-color: #94a0b4;
 }
+.info {
+    background-color: #e7f3ff; /* Light blue background */
+    color: #0056b3; /* Dark blue text */
+    border: 1px solid #b3d7ff; /* Light blue border */
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}

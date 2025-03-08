@@ -9,8 +9,13 @@
 <div class="container-fluid mt-5">
     <div class="row justify-content-center">
         <div class="col-lg-12 col-md-12">
+            <div class="info mb-2">
+                <p>Name (Date Join of the member, Personal Sales and Group Sales)</p>
+            </div>
+
             <div class="card">
                 <div class="card-body">
+                    
                    <div class="tree">
                           {!! generateTreeHTML($familyTree) !!}
                     </div>
@@ -30,7 +35,7 @@ function generateTreeHTML($tree, $isLastNode = false)
     foreach ($tree as $member) {
         $isLast = (++$i == $count) ? 'last-node' : '';
 
-        $html .= '<li class="'.$isLast.'"><a href="#">' . $member->name . '</a>';
+        $html .= '<li class="'.$isLast.'"><a href="#">' . $member->name . ' (' . $member->dateJoin . ', ' . $member->Total_Personal_Purchase . ', ' . $member->Total_Referral_Member_Purchase . ')'.  '</a>';
         if (!empty($member->children)) {
             $html .= generateTreeHTML($member->children);
         }
