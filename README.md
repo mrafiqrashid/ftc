@@ -70,3 +70,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 <img src="ss/member.png" alt="Description" width="400">
 <img src="ss/purchase.png" alt="Description" width="400">
 <img src="ss/family tree chart.png" alt="Description" width="400">
+
+## Import database
+
+ftc.sql
